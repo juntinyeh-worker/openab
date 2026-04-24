@@ -1,5 +1,8 @@
 # --- Build stage ---
-FROM rust:1-bookworm AS builder
+FROM public.ecr.aws/amazonlinux/amazonlinux:2023 AS builder
+RUN dnf install -y gcc gcc-c++ make openssl-devel && dnf clean all
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:$PATH"
 WORKDIR /build
 COPY Cargo.toml Cargo.lock ./
 RUN mkdir src && echo 'fn main() {}' > src/main.rs && cargo build --release && rm -rf src
@@ -7,13 +10,13 @@ COPY src/ src/
 RUN touch src/main.rs && cargo build --release
 
 # --- Runtime stage ---
-FROM debian:bookworm-slim
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl procps ripgrep tini unzip && rm -rf /var/lib/apt/lists/*
+FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+RUN dnf install -y ca-certificates curl procps ripgrep unzip shadow-utils tini && dnf clean all
 
-# Install kiro-cli (auto-detect arch, copy binary directly)
+# Install kiro-cli (auto-detect arch)
 ARG KIRO_CLI_VERSION=2.0.0
-RUN ARCH=$(dpkg --print-architecture) && \
-    if [ "$ARCH" = "arm64" ]; then URL="https://prod.download.cli.kiro.dev/stable/${KIRO_CLI_VERSION}/kirocli-aarch64-linux.zip"; \
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "aarch64" ]; then URL="https://prod.download.cli.kiro.dev/stable/${KIRO_CLI_VERSION}/kirocli-aarch64-linux.zip"; \
     else URL="https://prod.download.cli.kiro.dev/stable/${KIRO_CLI_VERSION}/kirocli-x86_64-linux.zip"; fi && \
     curl --proto '=https' --tlsv1.2 -sSf --retry 3 --retry-delay 5 "$URL" -o /tmp/kirocli.zip && \
     unzip /tmp/kirocli.zip -d /tmp && \
@@ -22,12 +25,9 @@ RUN ARCH=$(dpkg --print-architecture) && \
     rm -rf /tmp/kirocli /tmp/kirocli.zip
 
 # Install gh CLI
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-      -o /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
-      > /etc/apt/sources.list.d/github-cli.list && \
-    apt-get update && apt-get install -y --no-install-recommends gh && \
-    rm -rf /var/lib/apt/lists/*
+RUN dnf install -y 'dnf-command(config-manager)' && \
+    dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && \
+    dnf install -y gh && dnf clean all
 
 RUN useradd -m -s /bin/bash -u 1000 agent
 RUN mkdir -p /home/agent/.local/share/kiro-cli /home/agent/.kiro && \
