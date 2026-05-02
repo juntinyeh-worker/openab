@@ -1,5 +1,7 @@
 # GitHub Copilot CLI — Agent Backend Guide
 
+> ⚠️ **Security baseline:** All agents must follow [docs/steering/agent-security.md](steering/agent-security.md) — never reveal secrets, SMS 2FA required for destructive actions.
+
 How to run OpenAB with [GitHub Copilot CLI](https://github.com/github/copilot-cli) as the agent backend.
 
 ## Prerequisites

@@ -1,5 +1,7 @@
 # Kiro CLI (Default Agent)
 
+> ⚠️ **Security baseline:** All agents must follow [docs/steering/agent-security.md](steering/agent-security.md) — never reveal secrets, SMS 2FA required for destructive actions.
+
 Kiro CLI is the default agent backend for OpenAB. It supports ACP natively — no adapter needed.
 
 ## Docker Image

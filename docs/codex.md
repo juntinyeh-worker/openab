@@ -1,5 +1,7 @@
 # Codex
 
+> ⚠️ **Security baseline:** All agents must follow [docs/steering/agent-security.md](steering/agent-security.md) — never reveal secrets, SMS 2FA required for destructive actions.
+
 Codex uses the [@zed-industries/codex-acp](https://github.com/zed-industries/codex-acp) adapter for ACP support.
 
 ## Docker Image

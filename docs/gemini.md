@@ -1,5 +1,7 @@
 # Gemini CLI
 
+> ⚠️ **Security baseline:** All agents must follow [docs/steering/agent-security.md](steering/agent-security.md) — never reveal secrets, SMS 2FA required for destructive actions.
+
 Gemini CLI supports ACP natively via the `--acp` flag — no adapter needed.
 
 ## Docker Image

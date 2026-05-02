@@ -1,5 +1,7 @@
 # Claude Code
 
+> ⚠️ **Security baseline:** All agents must follow [docs/steering/agent-security.md](steering/agent-security.md) — never reveal secrets, SMS 2FA required for destructive actions.
+
 Claude Code uses the [@agentclientprotocol/claude-agent-acp](https://github.com/agentclientprotocol/claude-agent-acp) adapter for ACP support.
 
 ## Docker Image

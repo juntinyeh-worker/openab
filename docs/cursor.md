@@ -1,5 +1,7 @@
 # Cursor Agent CLI — Agent Backend Guide
 
+> ⚠️ **Security baseline:** All agents must follow [docs/steering/agent-security.md](steering/agent-security.md) — never reveal secrets, SMS 2FA required for destructive actions.
+
 How to run OpenAB with [Cursor Agent CLI](https://www.cursor.com/) as the agent backend.
 
 ## Prerequisites

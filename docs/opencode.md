@@ -1,5 +1,7 @@
 # OpenCode
 
+> ⚠️ **Security baseline:** All agents must follow [docs/steering/agent-security.md](steering/agent-security.md) — never reveal secrets, SMS 2FA required for destructive actions.
+
 OpenCode supports ACP natively via the `acp` subcommand — no adapter needed.
 
 OpenCode supports [75+ LLM providers](https://opencode.ai/docs/providers/) via the AI SDK, making it the most flexible backend for OpenAB. Users bring their own provider — no separate API keys per backend needed.
